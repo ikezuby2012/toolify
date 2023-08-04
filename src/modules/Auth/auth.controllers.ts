@@ -121,7 +121,6 @@ export const forgotPassword = catchAsync(
 
 export const resetPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("it hits here!");
     // get the otp
     const { otp } = req.body;
     const token = otp;

@@ -130,7 +130,6 @@ exports.forgotPassword = (0, utils_1.catchAsync)((req, res, next) => __awaiter(v
     }
 }));
 exports.resetPassword = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("it hits here!");
     // get the otp
     const { otp } = req.body;
     const token = otp;
