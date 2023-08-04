@@ -1,10 +1,11 @@
-import * as crypto from "crypto";
+// import * as crypto from "crypto";
 import mongoose from "mongoose";
 // import bcrypt from 'bcryptjs';
 import validator from "validator";
 import toJSON from "../toJSON/toJSON";
 import paginate from "../paginate/paginate";
 import { IUserDoc, IUserModel } from "./user.interfaces";
+import { generateOtp } from "../../services/otp/otp.service";
 
 const bcrypt = require("bcryptjs");
 
@@ -62,7 +63,6 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
     },
     phoneNumber: {
       type: String,
-      unique: true,
       required: true,
     },
     isEmailVerified: {
@@ -71,7 +71,6 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
     },
     otp: {
       type: String,
-      required: true,
     },
     accessRole: {
       type: String,
@@ -161,12 +160,9 @@ userSchema.method(
 userSchema.method(
   "createPasswordResetToken",
   async function (): Promise<string> {
-    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetToken = generateOtp();
 
-    this.passwordResetToken = crypto
-      .createHash("sha256")
-      .update(resetToken)
-      .digest("hex");
+    this.passwordResetToken = resetToken;
 
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 

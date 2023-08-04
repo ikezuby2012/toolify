@@ -17,6 +17,14 @@ router.post(
   validate(authValidation.verifyEmail),
   authController.verifyEmail
 );
+
 router.get("/resend-otp/:id", authController.regenerateOtp);
+router.post("/forgotpassword", authController.forgotPassword);
+
+router.post(
+  "/resetpassword",
+  validate(authValidation.resetPassword),
+  authController.resetPassword
+);
 
 export default router;

@@ -12,4 +12,6 @@ router.post("/login", (0, validate_1.validate)(Auth_1.authValidation.login), Aut
 router.post("/logout", (0, validate_1.validate)(Auth_1.authValidation.logout), Auth_1.authController.logout);
 router.post("/verify-email", (0, validate_1.validate)(Auth_1.authValidation.verifyEmail), Auth_1.authController.verifyEmail);
 router.get("/resend-otp/:id", Auth_1.authController.regenerateOtp);
+router.post("/forgotpassword", Auth_1.authController.forgotPassword);
+router.post("/resetpassword", (0, validate_1.validate)(Auth_1.authValidation.resetPassword), Auth_1.authController.resetPassword);
 exports.default = router;

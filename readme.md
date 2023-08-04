@@ -1,4 +1,4 @@
-# UM_VISUALS REPOSITORY
+# TOOLIFY REPOSITORY
 ## Manual Installation
 
 clone the repo:

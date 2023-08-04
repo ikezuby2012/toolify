@@ -43,11 +43,13 @@ export const forgotPassword = {
 };
 
 export const resetPassword = {
-  query: Joi.object().keys({
-    token: Joi.string().required(),
-  }),
+  // params: Joi.object().keys({
+  //   otp: Joi.string().required(),
+  // }),
   body: Joi.object().keys({
     password: Joi.string().required().custom(password),
+    passwordConfirm: Joi.string().required().custom(password),
+    otp: Joi.string().required(),
   }),
 };
 

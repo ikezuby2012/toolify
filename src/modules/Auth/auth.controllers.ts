@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import { catchAsync } from "../utils";
 import { User } from "../user";
@@ -7,8 +7,12 @@ import { generateOtp } from "../../services/otp/otp.service";
 import { createSendToken } from "../token/token.service";
 import * as authService from "./auth.service";
 import { logger } from "../logger";
-import { sendOtpEmail } from "../../services/email/email.service";
+import {
+  sendOtpEmail,
+  sendPasswordReset,
+} from "../../services/email/email.service";
 import { IUserDoc } from "../user/user.interfaces";
+import { ApiError } from "../errors";
 
 export const register = catchAsync(async (req: Request, res: Response) => {
   const otp = generateOtp();
@@ -78,3 +82,70 @@ export const regenerateOtp = catchAsync(async (req: Request, res: Response) => {
     data: user,
   });
 });
+
+export const forgotPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // 1) Get user based on POSTed email
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return next(new ApiError(404, "There is no user with email address."));
+    }
+
+    // 2) Generate the random reset token
+    const resetToken = await user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+    // console.log(resetToken, ": reset token");
+
+    // send it to user email
+    try {
+      sendPasswordReset(req.body.email, resetToken);
+
+      res.status(200).json({
+        status: "success",
+        message: "Token sent to email!",
+      });
+    } catch (err) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return next(
+        new ApiError(
+          httpStatus.BAD_REQUEST,
+          "There was an error sending the email. Try again later"
+        )
+      );
+    }
+  }
+);
+
+export const resetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("it hits here!");
+    // get the otp
+    const { otp } = req.body;
+    const token = otp;
+    // get user based on reset token
+    const user = await User.findOne({
+      passwordResetToken: token,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    // 2) If token has not expired, and there is user, set the new password
+    if (!user) {
+      return next(
+        new ApiError(httpStatus.NOT_FOUND, "Token is invalid or has expired")
+      );
+    }
+
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    // 3) Update changedPasswordAt property for the user
+    // 4) Log the user in, send JWT
+    createSendToken(user, 200, req, res);
+  }
+);

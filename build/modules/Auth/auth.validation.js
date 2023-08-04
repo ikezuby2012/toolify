@@ -37,11 +37,13 @@ exports.forgotPassword = {
     }),
 };
 exports.resetPassword = {
-    query: Joi.object().keys({
-        token: Joi.string().required(),
-    }),
+    // params: Joi.object().keys({
+    //   otp: Joi.string().required(),
+    // }),
     body: Joi.object().keys({
         password: Joi.string().required().custom(custom_validation_1.password),
+        passwordConfirm: Joi.string().required().custom(custom_validation_1.password),
+        otp: Joi.string().required(),
     }),
 };
 exports.verifyEmail = {
