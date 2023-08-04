@@ -1,14 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendPasswordReset = exports.sendOtpEmail = void 0;
 const confirmEmail_template_1 = require("./templates/confirmEmail.template");
 const passwordReset_template_1 = require("./templates/passwordReset.template");
+const config_1 = __importDefault(require("../../config"));
+const { api_key: ApiKey } = config_1.default.sendBlue;
 const SibApiV3Sdk = require("sib-api-v3-typescript");
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 // Configure API key authorization: api-key
 const apiKey = apiInstance.authentications.apiKey;
-apiKey.apiKey =
-    "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";
+apiKey.apiKey = ApiKey;
 const sendSMTPEmail = new SibApiV3Sdk.SendSmtpEmail();
 const sendOtpEmail = (userMail, userName, pin) => {
     const html = (0, confirmEmail_template_1.confirmEmail)(pin);
