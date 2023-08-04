@@ -1,5 +1,8 @@
 import { confirmEmail } from "./templates/confirmEmail.template";
 import { passwordReset } from "./templates/passwordReset.template";
+import config from "../../config";
+
+const { api_key: ApiKey } = config.sendBlue;
 
 const SibApiV3Sdk = require("sib-api-v3-typescript");
 
@@ -7,8 +10,7 @@ const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 // Configure API key authorization: api-key
 const apiKey = apiInstance.authentications.apiKey;
-apiKey.apiKey =
-  "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";
+apiKey.apiKey = ApiKey;
 
 const sendSMTPEmail = new SibApiV3Sdk.SendSmtpEmail();
 
