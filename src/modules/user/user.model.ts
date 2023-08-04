@@ -58,7 +58,6 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
     },
     idNumber: {
       type: String,
-      unique: true,
       required: true,
     },
     phoneNumber: {

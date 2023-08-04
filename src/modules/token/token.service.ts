@@ -38,7 +38,9 @@ export const createSendToken = (
 ) => {
   const token = signToken(user._id);
   res.cookie("jwt", token, {
-    expires: new Date(Date.now() + cookieExpiresIn * 24 * 60 * 60 * 1000),
+    expires: new Date(
+      Date.now() + Number(cookieExpiresIn) * 24 * 60 * 60 * 1000
+    ),
     httpOnly: true,
     secure: req.secure || req.headers["x-forwarded-proto"] === "https",
   });

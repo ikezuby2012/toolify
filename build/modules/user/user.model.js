@@ -64,7 +64,6 @@ const userSchema = new mongoose_1.default.Schema({
     },
     idNumber: {
         type: String,
-        unique: true,
         required: true,
     },
     phoneNumber: {
