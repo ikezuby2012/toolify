@@ -5,7 +5,7 @@ import { IUserDoc } from "../user/user.interfaces";
 import config from "../../config";
 import { logger } from "../logger";
 
-const { secret, cookieExpiresIn, jwtExpiresIn } = config.jwt;
+const { secret, jwtExpiresIn } = config.jwt;
 
 // const verify = promisify(jwt.verify);
 
@@ -38,9 +38,7 @@ export const createSendToken = (
 ) => {
   const token = signToken(user._id);
   res.cookie("jwt", token, {
-    expires: new Date(
-      Date.now() + Number(cookieExpiresIn) * 24 * 60 * 60 * 1000
-    ),
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     httpOnly: true,
     secure: req.secure || req.headers["x-forwarded-proto"] === "https",
   });

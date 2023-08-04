@@ -16,7 +16,7 @@ exports.createSendToken = exports.verifyToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("../../config"));
 const logger_1 = require("../logger");
-const { secret, cookieExpiresIn, jwtExpiresIn } = config_1.default.jwt;
+const { secret, jwtExpiresIn } = config_1.default.jwt;
 // const verify = promisify(jwt.verify);
 const signToken = (id) => {
     return jsonwebtoken_1.default.sign({ id, iat: new Date().getTime() / 1000 }, secret, {
@@ -39,7 +39,7 @@ exports.verifyToken = verifyToken;
 const createSendToken = (user, statusCode, req, res) => {
     const token = signToken(user._id);
     res.cookie("jwt", token, {
-        expires: new Date(Date.now() + Number(cookieExpiresIn) * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         httpOnly: true,
         secure: req.secure || req.headers["x-forwarded-proto"] === "https",
     });
