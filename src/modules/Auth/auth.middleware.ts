@@ -30,11 +30,9 @@ export const protect = catchAsync(
     // 2) Verification token
     const decoded: any = await verifyToken(token);
 
-    console.log(decoded);
-
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);
-    console.log(currentUser, ": current user");
+
     if (!currentUser) {
       return next(
         new ApiError(

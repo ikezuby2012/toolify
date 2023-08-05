@@ -9,7 +9,7 @@ export interface ITool {
   make: string;
   model: string;
   equipmentDelivery0rReturn: string;
-  paymentPlan: [{ daily?: number; weekly?: number; monthly?: number }];
+  paymentPlan: { daily?: number; weekly?: number; monthly?: number };
   availableQuantity: number;
   availableLocation: string;
   image?: Blob | string;

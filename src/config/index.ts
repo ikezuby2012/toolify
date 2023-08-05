@@ -43,6 +43,9 @@ const envVarsSchema = Joi.object()
     EMAIL_FROM: Joi.string().description(
       "the from field in the emails sent by the app"
     ),
+    CLOUD_API_SECRET: Joi.string().description("cloud api secret"),
+    CLOUD_API_KEY: Joi.string().description("cloud api key"),
+    CLOUD_API_NAME: Joi.string().description("cloud api name"),
     CLIENT_URL: Joi.string().description("Client url"),
     CLIENT_ENV: Joi.boolean().description("Client environment").default(false),
     GOOGLE_CLIENT_ID: Joi.string().description("google client id"),
@@ -99,6 +102,11 @@ const config = {
     email: envVars.SENDINBLUE_EMAIL,
     pass: envVars.SENDINBLUE_PASSWORD,
     api_key: envVars.SENDINBLUE_API_KEY,
+  },
+  cloud: {
+    apiKey: envVars.CLOUD_API_KEY,
+    apiSecret: envVars.CLOUD_API_SECRET,
+    apiName: envVars.CLOUD_API_NAME,
   },
   clientUrl: envVars.CLIENT_URL,
   clientEnv: envVars.CLIENT_ENV,

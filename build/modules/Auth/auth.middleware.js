@@ -34,10 +34,8 @@ exports.protect = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0
     }
     // 2) Verification token
     const decoded = yield (0, token_service_1.verifyToken)(token);
-    console.log(decoded);
     // 3) Check if user still exists
     const currentUser = yield user_1.User.findById(decoded.id);
-    console.log(currentUser, ": current user");
     if (!currentUser) {
         return next(new ApiError_1.default(401, "The user belonging to this token does no longer exist."));
     }

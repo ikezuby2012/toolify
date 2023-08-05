@@ -6,7 +6,6 @@ import compression from "compression";
 import cors from "cors";
 import httpStatus from "http-status";
 import session from "express-session";
-
 import config from "./config";
 import { morgan } from "./modules/logger";
 import { authLimiter } from "./modules/utils";

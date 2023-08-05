@@ -5,13 +5,12 @@ import { auth } from "../../modules/Auth";
 
 const router: Router = express.Router();
 
-router
-  .route("/")
-  .post(
-    validate(toolValidation.createNewTool),
-    auth.protect,
-    auth.checkRoles("createTool"),
-    toolController.createNewTool
-  );
+router.route("/").post(
+  // validate(toolValidation.createNewTool),
+  auth.protect,
+  auth.checkRoles("createTool"),
+  toolController.uploadImage,
+  toolController.createNewTool
+);
 
 export default router;

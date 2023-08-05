@@ -32,7 +32,7 @@ const toolSchema = new mongoose.Schema<IToolDoc, IToolModel>(
       required: [true, "equipmentDelivery0rReturn is required"],
     },
     paymentPlan: {
-      type: [{ daily: Number, weekly: Number, monthly: Number }],
+      type: { daily: Number, weekly: Number, monthly: Number },
       required: true,
     },
     availableQuantity: {
@@ -43,7 +43,7 @@ const toolSchema = new mongoose.Schema<IToolDoc, IToolModel>(
       type: String,
       required: [true, "available plan is required"],
     },
-    image: { type: String },
+    image: String,
     creatorId: {
       type: Schema.Types.ObjectId,
       ref: "User",

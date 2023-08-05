@@ -56,7 +56,7 @@ const toolSchema = new mongoose_1.default.Schema({
         required: [true, "equipmentDelivery0rReturn is required"],
     },
     paymentPlan: {
-        type: [{ daily: Number, weekly: Number, monthly: Number }],
+        type: { daily: Number, weekly: Number, monthly: Number },
         required: true,
     },
     availableQuantity: {
@@ -67,7 +67,7 @@ const toolSchema = new mongoose_1.default.Schema({
         type: String,
         required: [true, "available plan is required"],
     },
-    image: { type: String },
+    image: String,
     creatorId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "User",
