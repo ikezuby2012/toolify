@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import { toolController, toolValidation } from "../../modules/Tool";
-import { validate } from "../../modules/validate";
+import { toolController } from "../../modules/Tool";
+// import { validate } from "../../modules/validate";
 import { auth } from "../../modules/Auth";
 
 const router: Router = express.Router();
