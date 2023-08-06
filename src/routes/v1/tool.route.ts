@@ -13,4 +13,13 @@ router.route("/").post(
   toolController.createNewTool
 );
 
+router
+  .route("/:id")
+  .patch(
+    auth.protect,
+    auth.checkRoles("updateTool"),
+    toolController.uploadImage,
+    toolController.updateTool
+  );
+
 export default router;

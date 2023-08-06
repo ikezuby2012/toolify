@@ -78,7 +78,7 @@ const toolSchema = new mongoose_1.default.Schema({
 });
 toolSchema.pre(/^find/, function (next) {
     this.populate({
-        path: "User",
+        path: "creatorId",
     });
     next();
 });

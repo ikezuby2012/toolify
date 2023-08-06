@@ -1,6 +1,6 @@
 const allRoles = {
-  rental: ["createTool"],
-  borrower: ["getUsers", "makePayment"],
+  rental: ["createTool", "updateTool"],
+  borrower: ["getTools", "makePayment"],
 };
 
 export const roles: string[] = Object.keys(allRoles);

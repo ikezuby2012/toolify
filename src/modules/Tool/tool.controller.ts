@@ -72,11 +72,13 @@ export const createNewTool = catchAsync(
 );
 
 export const updateTool = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    if (typeof req.params.Id === "string") {
+  async (req: Request | any, res: Response, next: NextFunction) => {
+    const image = req.file && req.file.path;
+    if (typeof req.params.id === "string") {
       const tool = await toolService.updateToolById(
-        new mongoose.Types.ObjectId(req.params.userId),
-        req.body
+        new mongoose.Types.ObjectId(req.params.id),
+        req.body,
+        image
       );
 
       res.status(httpStatus.OK).json({

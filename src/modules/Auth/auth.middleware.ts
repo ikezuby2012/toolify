@@ -1,12 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
+import jwt from "jsonwebtoken";
 
+import { promisify } from "util";
 import { User } from "../user";
 import ApiError from "../errors/ApiError";
 import catchAsync from "../utils/catchAsync";
-// import config from '../../config';
+import config from "../../config";
 import { roleRights } from "../../config/roles";
-import { verifyToken } from "../token/token.service";
+// import { verifyToken } from "../token/token.service";
+
+const { secret } = config.jwt;
 
 export const protect = catchAsync(
   async (req: Request | any, res: Response, next: NextFunction) => {
@@ -28,7 +32,7 @@ export const protect = catchAsync(
     }
 
     // 2) Verification token
-    const decoded: any = await verifyToken(token);
+    const decoded = await promisify(jwt.verify)(token, secret);
 
     // 3) Check if user still exists
     const currentUser = await User.findById(decoded.id);

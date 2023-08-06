@@ -14,12 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkRoles = exports.protect = void 0;
 const http_status_1 = __importDefault(require("http-status"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const util_1 = require("util");
 const user_1 = require("../user");
 const ApiError_1 = __importDefault(require("../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
-// import config from '../../config';
+const config_1 = __importDefault(require("../../config"));
 const roles_1 = require("../../config/roles");
-const token_service_1 = require("../token/token.service");
+// import { verifyToken } from "../token/token.service";
+const { secret } = config_1.default.jwt;
 exports.protect = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token;
     if (req.headers.authorization &&
@@ -33,7 +36,7 @@ exports.protect = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0
         return next(new ApiError_1.default(401, "You are not logged in! Please log in to get access."));
     }
     // 2) Verification token
-    const decoded = yield (0, token_service_1.verifyToken)(token);
+    const decoded = yield (0, util_1.promisify)(jsonwebtoken_1.default.verify)(token, secret);
     // 3) Check if user still exists
     const currentUser = yield user_1.User.findById(decoded.id);
     if (!currentUser) {

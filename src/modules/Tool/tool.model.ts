@@ -57,7 +57,7 @@ const toolSchema = new mongoose.Schema<IToolDoc, IToolModel>(
 
 toolSchema.pre<IToolDoc>(/^find/, function (next) {
   this.populate({
-    path: "User",
+    path: "creatorId",
   });
   next();
 });

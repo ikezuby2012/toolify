@@ -19,14 +19,12 @@ export const verifyToken = async (token: string): Promise<JwtPayload> => {
   // eslint-disable-next-line @typescript-eslint/no-redeclare
   let returnValue: JwtPayload;
   try {
-    returnValue = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as JwtPayload;
+    returnValue = jwt.verify(token, secret) as JwtPayload;
   } catch (err) {
     logger.error(err);
     returnValue = {};
   }
+  console.log(returnValue, ": return value");
   return returnValue;
 };
 

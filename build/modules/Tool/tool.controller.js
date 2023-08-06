@@ -87,8 +87,9 @@ exports.createNewTool = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, 
     });
 }));
 exports.updateTool = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (typeof req.params.Id === "string") {
-        const tool = yield toolService.updateToolById(new mongoose_1.default.Types.ObjectId(req.params.userId), req.body);
+    const image = req.file && req.file.path;
+    if (typeof req.params.id === "string") {
+        const tool = yield toolService.updateToolById(new mongoose_1.default.Types.ObjectId(req.params.id), req.body, image);
         res.status(http_status_1.default.OK).json({
             status: "success",
             data: tool,

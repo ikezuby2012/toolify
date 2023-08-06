@@ -27,12 +27,13 @@ const verifyToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     // eslint-disable-next-line @typescript-eslint/no-redeclare
     let returnValue;
     try {
-        returnValue = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        returnValue = jsonwebtoken_1.default.verify(token, secret);
     }
     catch (err) {
         logger_1.logger.error(err);
         returnValue = {};
     }
+    console.log(returnValue, ": return value");
     return returnValue;
 });
 exports.verifyToken = verifyToken;

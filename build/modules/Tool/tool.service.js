@@ -27,15 +27,34 @@ exports.getToolById = getToolById;
  * Update tool by id
  * @param {mongoose.Types.ObjectId} userId
  * @param {UpdateToolBody} updateBody
+ * @param {any} image
  * @returns {Promise<IToolDoc | null>}
  */
-const updateToolById = (userId, updateTool) => __awaiter(void 0, void 0, void 0, function* () {
-    const tool = yield (0, exports.getToolById)(userId);
+const updateToolById = (toolId, updateTool, image) => __awaiter(void 0, void 0, void 0, function* () {
+    const tool = yield (0, exports.getToolById)(toolId);
+    const { category, title, description, make, model, equipmentDelivery0rReturn, availableQuantity, availableLocation, paymentPlanDaily, paymentPlanWeekly, paymentPlanMonthly, } = updateTool;
     if (!tool) {
         throw new errors_1.ApiError(http_status_1.default.NOT_FOUND, "tool not found");
     }
-    Object.assign(tool, updateTool);
-    yield tool.save();
-    return tool;
+    const updatedTool = yield tool_model_1.default.findByIdAndUpdate(toolId, {
+        category,
+        title,
+        description,
+        make,
+        model,
+        equipmentDelivery0rReturn,
+        availableQuantity: availableQuantity && parseInt(availableQuantity, 10),
+        availableLocation,
+        image,
+        paymentPlan: {
+            daily: paymentPlanDaily && parseInt(paymentPlanDaily, 10),
+            weekly: paymentPlanWeekly && parseInt(paymentPlanWeekly, 10),
+            monthly: paymentPlanMonthly && parseInt(paymentPlanMonthly, 10),
+        },
+    }, {
+        new: true,
+        runValidators: true,
+    });
+    return updatedTool;
 });
 exports.updateToolById = updateToolById;
