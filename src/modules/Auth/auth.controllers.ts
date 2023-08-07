@@ -24,6 +24,7 @@ export const register = catchAsync(async (req: Request, res: Response) => {
     passwordConfirm: req.body.passwordConfirm,
     idNumber: req.body.idNumber,
     phoneNumber: req.body.phoneNumber,
+    accessRole: req.body.accessRole,
     otp,
   });
 

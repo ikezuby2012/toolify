@@ -4,13 +4,14 @@ import mongoose from "mongoose";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage, Options } from "multer-storage-cloudinary";
 import multer from "multer";
-import { catchAsync } from "../utils";
+import { catchAsync, pick } from "../utils";
 import ApiError from "../errors/ApiError";
 
 import Tool from "./tool.model";
 
 import config from "../../config";
 import * as toolService from "./tool.service";
+import { IOptions } from "../paginate/paginate";
 
 cloudinary.config({
   cloud_name: "dilvag5dx",
@@ -41,7 +42,6 @@ export const createNewTool = catchAsync(
       equipmentDelivery0rReturn,
       availableQuantity,
       availableLocation,
-      creatorId,
     } = req.body;
 
     const tool = {
@@ -58,7 +58,7 @@ export const createNewTool = catchAsync(
       },
       availableQuantity: parseInt(availableQuantity, 10),
       availableLocation,
-      creatorId,
+      creatorId: req.user.id,
       image: req.file ? req.file.path : req.body.image ?? "",
     };
 
@@ -88,5 +88,45 @@ export const updateTool = catchAsync(
     } else {
       return next(new ApiError(httpStatus.NOT_FOUND, "id is required"));
     }
+  }
+);
+
+export const getAllTools = catchAsync(async (req: Request, res: Response) => {
+  const options: IOptions = pick(req.query, [
+    "sortBy",
+    "limit",
+    "page",
+    "projectBy",
+  ]);
+  const result = await toolService.queryDocs({}, options);
+
+  res.status(httpStatus.OK).json({
+    status: "success",
+    data: result,
+  });
+});
+
+export const getToolById = catchAsync(async (req: Request, res: Response) => {
+  if (typeof req.params.id === "string") {
+    const tool = await toolService.getToolById(
+      new mongoose.Types.ObjectId(req.params.id)
+    );
+
+    res.status(httpStatus.OK).json({
+      status: "success",
+      data: tool,
+    });
+  }
+});
+
+export const getUsersTool = catchAsync(
+  async (req: Request | any, res: Response) => {
+    const userTools = (await toolService.getToolCreatedId(req.user.id)) as any;
+
+    res.status(httpStatus.OK).json({
+      status: "success",
+      length: userTools?.length,
+      data: userTools,
+    });
   }
 );

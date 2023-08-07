@@ -29,67 +29,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const toJSON_1 = __importDefault(require("../toJSON/toJSON"));
 const paginate_1 = __importDefault(require("../paginate/paginate"));
-const toolSchema = new mongoose_1.default.Schema({
-    category: {
-        type: String,
-        required: [true, "category is required"],
-        trim: true,
-    },
-    title: {
-        type: String,
-        required: [true, "title is required"],
-    },
-    description: {
-        type: String,
-        required: [true, "description is required"],
-    },
-    make: {
-        type: String,
-        required: [true, "make is required"],
-    },
-    model: {
-        type: String,
-        required: [true, "model is required"],
-    },
-    equipmentDelivery0rReturn: {
-        type: String,
-        required: [true, "equipmentDelivery0rReturn is required"],
-    },
-    paymentPlan: {
-        type: { daily: Number, weekly: Number, monthly: Number },
-        required: true,
-    },
-    availableQuantity: {
-        type: Number,
-        required: [true, "available quantity plan is required"],
-    },
-    availableLocation: {
-        type: String,
-        required: [true, "available plan is required"],
-    },
-    image: String,
-    borrowers: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: "User",
-        },
-    ],
-    creatorId: {
+const cartSchema = new mongoose_1.default.Schema({
+    userId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "User",
         required: [true, "creator id is required"],
     },
+    tool: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "Tool",
+        required: [true, "creator id is required"],
+    },
+    quantity: {
+        type: Number,
+    },
 }, {
     timestamps: true,
 });
-toolSchema.pre(/^find/, function (next) {
+cartSchema.pre(/^find/, function (next) {
     this.populate({
-        path: "creatorId borrowers",
+        path: "userId tool",
     });
     next();
 });
 // add plugin that converts mongoose to json
-toolSchema.plugin(toJSON_1.default);
-toolSchema.plugin(paginate_1.default);
-const Tool = mongoose_1.default.model("Tool", toolSchema);
-exports.default = Tool;
+cartSchema.plugin(toJSON_1.default);
+cartSchema.plugin(paginate_1.default);
+const Cart = mongoose_1.default.model("Cart", cartSchema);
+exports.default = Cart;

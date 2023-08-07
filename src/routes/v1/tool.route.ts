@@ -5,13 +5,18 @@ import { auth } from "../../modules/Auth";
 
 const router: Router = express.Router();
 
-router.route("/").post(
-  // validate(toolValidation.createNewTool),
-  auth.protect,
-  auth.checkRoles("createTool"),
-  toolController.uploadImage,
-  toolController.createNewTool
-);
+router
+  .route("/")
+  .post(
+    // validate(toolValidation.createNewTool),
+    auth.protect,
+    auth.checkRoles("createTool"),
+    toolController.uploadImage,
+    toolController.createNewTool
+  )
+  .get(toolController.getAllTools);
+
+router.route("/user").get(auth.protect, toolController.getUsersTool);
 
 router
   .route("/:id")
@@ -20,6 +25,7 @@ router
     auth.checkRoles("updateTool"),
     toolController.uploadImage,
     toolController.updateTool
-  );
+  )
+  .get(toolController.getToolById);
 
 export default router;

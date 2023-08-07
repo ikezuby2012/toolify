@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateToolById = exports.getToolById = void 0;
+exports.getToolCreatedId = exports.queryDocs = exports.updateToolById = exports.getToolById = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const tool_model_1 = __importDefault(require("./tool.model"));
 const errors_1 = require("../errors");
 /**
- * Get user by id
+ * Get document by id
  * @param {mongoose.Types.ObjectId} id
- * @returns {Promise<IUserDoc | null>}
+ * @returns {Promise<IToolDoc | null>}
  */
 const getToolById = (id) => __awaiter(void 0, void 0, void 0, function* () { return tool_model_1.default.findById(id); });
 exports.getToolById = getToolById;
@@ -58,3 +58,24 @@ const updateToolById = (toolId, updateTool, image) => __awaiter(void 0, void 0, 
     return updatedTool;
 });
 exports.updateToolById = updateToolById;
+/**
+ * Query for tools
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @returns {Promise<QueryResult>}
+ */
+const queryDocs = (filter, options) => __awaiter(void 0, void 0, void 0, function* () {
+    const tools = yield tool_model_1.default.paginate(filter, options);
+    return tools;
+});
+exports.queryDocs = queryDocs;
+/**
+ * Get tools created by id
+ * @param {mongoose.Types.ObjectId} id
+ * @returns {Promise<IToolDoc | null>}
+ */
+const getToolCreatedId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const tools = (yield tool_model_1.default.find({ creatorId: id }));
+    return tools;
+});
+exports.getToolCreatedId = getToolCreatedId;

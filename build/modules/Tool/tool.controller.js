@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTool = exports.createNewTool = exports.uploadImage = void 0;
+exports.getUsersTool = exports.getToolById = exports.getAllTools = exports.updateTool = exports.createNewTool = exports.uploadImage = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const cloudinary_1 = require("cloudinary");
@@ -62,7 +62,7 @@ const parser = (0, multer_1.default)({ storage: cloudStorage });
 exports.uploadImage = parser.single("image");
 exports.createNewTool = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const { category, title, description, make, model, equipmentDelivery0rReturn, availableQuantity, availableLocation, creatorId, } = req.body;
+    const { category, title, description, make, model, equipmentDelivery0rReturn, availableQuantity, availableLocation, } = req.body;
     const tool = {
         category,
         title,
@@ -77,7 +77,7 @@ exports.createNewTool = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, 
         },
         availableQuantity: parseInt(availableQuantity, 10),
         availableLocation,
-        creatorId,
+        creatorId: req.user.id,
         image: req.file ? req.file.path : (_a = req.body.image) !== null && _a !== void 0 ? _a : "",
     };
     const newTool = yield tool_model_1.default.create(tool);
@@ -98,4 +98,34 @@ exports.updateTool = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 
     else {
         return next(new ApiError_1.default(http_status_1.default.NOT_FOUND, "id is required"));
     }
+}));
+exports.getAllTools = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = (0, utils_1.pick)(req.query, [
+        "sortBy",
+        "limit",
+        "page",
+        "projectBy",
+    ]);
+    const result = yield toolService.queryDocs({}, options);
+    res.status(http_status_1.default.OK).json({
+        status: "success",
+        data: result,
+    });
+}));
+exports.getToolById = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (typeof req.params.id === "string") {
+        const tool = yield toolService.getToolById(new mongoose_1.default.Types.ObjectId(req.params.id));
+        res.status(http_status_1.default.OK).json({
+            status: "success",
+            data: tool,
+        });
+    }
+}));
+exports.getUsersTool = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userTools = (yield toolService.getToolCreatedId(req.user.id));
+    res.status(http_status_1.default.OK).json({
+        status: "success",
+        length: userTools === null || userTools === void 0 ? void 0 : userTools.length,
+        data: userTools,
+    });
 }));

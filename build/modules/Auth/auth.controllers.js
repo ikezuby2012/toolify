@@ -54,6 +54,7 @@ exports.register = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, void 
         passwordConfirm: req.body.passwordConfirm,
         idNumber: req.body.idNumber,
         phoneNumber: req.body.phoneNumber,
+        accessRole: req.body.accessRole,
         otp,
     });
     // sent otp to user email

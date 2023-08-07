@@ -4,11 +4,12 @@ import mongoose from "mongoose";
 import { IToolDoc, UpdateToolBody } from "./tool.interface";
 import Tool from "./tool.model";
 import { ApiError } from "../errors";
+import { IOptions, QueryResult } from "../paginate/paginate";
 
 /**
- * Get user by id
+ * Get document by id
  * @param {mongoose.Types.ObjectId} id
- * @returns {Promise<IUserDoc | null>}
+ * @returns {Promise<IToolDoc | null>}
  */
 export const getToolById = async (
   id: mongoose.Types.ObjectId
@@ -71,4 +72,30 @@ export const updateToolById = async (
   );
 
   return updatedTool;
+};
+
+/**
+ * Query for tools
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @returns {Promise<QueryResult>}
+ */
+export const queryDocs = async (
+  filter: Record<string, any>,
+  options: IOptions
+): Promise<QueryResult> => {
+  const tools = await Tool.paginate(filter, options);
+  return tools;
+};
+
+/**
+ * Get tools created by id
+ * @param {mongoose.Types.ObjectId} id
+ * @returns {Promise<IToolDoc | null>}
+ */
+export const getToolCreatedId = async (
+  id: mongoose.Types.ObjectId
+): Promise<IToolDoc | null> => {
+  const tools = (await Tool.find({ creatorId: id })) as any;
+  return tools;
 };

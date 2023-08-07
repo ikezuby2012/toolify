@@ -44,6 +44,12 @@ const toolSchema = new mongoose.Schema<IToolDoc, IToolModel>(
       required: [true, "available plan is required"],
     },
     image: String,
+    borrowers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     creatorId: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -57,7 +63,7 @@ const toolSchema = new mongoose.Schema<IToolDoc, IToolModel>(
 
 toolSchema.pre<IToolDoc>(/^find/, function (next) {
   this.populate({
-    path: "creatorId",
+    path: "creatorId borrowers",
   });
   next();
 });
