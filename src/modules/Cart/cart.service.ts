@@ -30,15 +30,27 @@ export const queryDoc = async (
 
 /**
  * Delete doc by id
- * @param {mongoose.Types.ObjectId} userId
- * @returns {Promise<IUserDoc | null>}
+ * @param {mongoose.Types.ObjectId} DocId
+ * @returns {Promise<ICartDoc | null>}
  */
 export const deleteCartById = async (
-  userId: mongoose.Types.ObjectId
+  DocId: mongoose.Types.ObjectId
 ): Promise<ICartDoc | null> => {
-  const doc = await Cart.findByIdAndDelete(userId);
+  const doc = await Cart.findByIdAndDelete(DocId);
   if (!doc) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+    throw new ApiError(httpStatus.NOT_FOUND, "Doc not found");
   }
   return doc;
+};
+
+/**
+ * Get borrowed tools
+ * @param {mongoose.Types.ObjectId} id
+ * @returns {Promise<ICartDoc | null>}
+ */
+export const getBorrowedTools = async (
+  id: mongoose.Types.ObjectId
+): Promise<ICartDoc | null> => {
+  const tools = (await Cart.find({ userId: id })) as any;
+  return tools;
 };

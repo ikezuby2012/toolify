@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCartById = exports.queryDoc = exports.getCartById = void 0;
+exports.getBorrowedTools = exports.deleteCartById = exports.queryDoc = exports.getCartById = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const cart_model_1 = __importDefault(require("./cart.model"));
 const errors_1 = require("../errors");
@@ -36,14 +36,24 @@ const queryDoc = (filter, options) => __awaiter(void 0, void 0, void 0, function
 exports.queryDoc = queryDoc;
 /**
  * Delete doc by id
- * @param {mongoose.Types.ObjectId} userId
- * @returns {Promise<IUserDoc | null>}
+ * @param {mongoose.Types.ObjectId} DocId
+ * @returns {Promise<ICartDoc | null>}
  */
-const deleteCartById = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const doc = yield cart_model_1.default.findByIdAndDelete(userId);
+const deleteCartById = (DocId) => __awaiter(void 0, void 0, void 0, function* () {
+    const doc = yield cart_model_1.default.findByIdAndDelete(DocId);
     if (!doc) {
-        throw new errors_1.ApiError(http_status_1.default.NOT_FOUND, "User not found");
+        throw new errors_1.ApiError(http_status_1.default.NOT_FOUND, "Doc not found");
     }
     return doc;
 });
 exports.deleteCartById = deleteCartById;
+/**
+ * Get borrowed tools
+ * @param {mongoose.Types.ObjectId} id
+ * @returns {Promise<ICartDoc | null>}
+ */
+const getBorrowedTools = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const tools = (yield cart_model_1.default.find({ userId: id }));
+    return tools;
+});
+exports.getBorrowedTools = getBorrowedTools;

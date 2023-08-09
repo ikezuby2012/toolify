@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsersTool = exports.getToolById = exports.getAllTools = exports.updateTool = exports.createNewTool = exports.uploadImage = void 0;
+exports.searchTool = exports.getUsersTool = exports.getToolById = exports.getAllTools = exports.updateTool = exports.createNewTool = exports.uploadImage = void 0;
 const http_status_1 = __importDefault(require("http-status"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const cloudinary_1 = require("cloudinary");
@@ -127,5 +127,18 @@ exports.getUsersTool = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, v
         status: "success",
         length: userTools === null || userTools === void 0 ? void 0 : userTools.length,
         data: userTools,
+    });
+}));
+exports.searchTool = (0, utils_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { search } = (0, utils_1.pick)(req.query, ["search"]);
+    const { id } = req.params;
+    const types = ["category"];
+    if (!types.includes(search)) {
+        return next(new ApiError_1.default(http_status_1.default.NOT_ACCEPTABLE, "query type is not allowed"));
+    }
+    const data = yield tool_model_1.default.find({ category: id });
+    res.status(http_status_1.default.OK).json({
+        status: "success",
+        data,
     });
 }));

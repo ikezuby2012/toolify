@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import docsRoute from "./swagger.route";
 import authRoute from "./auth.route";
 import toolRoute from "./tool.route";
+import cartRoute from "./cart.route";
 // import config from "../../config";
 
 const router = express.Router();
@@ -22,6 +23,7 @@ const defaultIRoute: IRoute[] = [
     route: authRoute,
   },
   { path: "/tool", route: toolRoute },
+  { path: "/cart", route: cartRoute },
 ];
 
 const devIRoute: IRoute[] = [

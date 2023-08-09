@@ -130,3 +130,25 @@ export const getUsersTool = catchAsync(
     });
   }
 );
+
+export const searchTool = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { search } = pick(req.query, ["search"]);
+    const { id } = req.params;
+
+    const types = ["category"];
+
+    if (!types.includes(search)) {
+      return next(
+        new ApiError(httpStatus.NOT_ACCEPTABLE, "query type is not allowed")
+      );
+    }
+
+    const data = await Tool.find({ category: id });
+
+    res.status(httpStatus.OK).json({
+      status: "success",
+      data,
+    });
+  }
+);

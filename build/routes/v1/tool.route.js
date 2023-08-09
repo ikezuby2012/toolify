@@ -19,4 +19,5 @@ router
     .route("/:id")
     .patch(Auth_1.auth.protect, Auth_1.auth.checkRoles("updateTool"), Tool_1.toolController.uploadImage, Tool_1.toolController.updateTool)
     .get(Tool_1.toolController.getToolById);
+router.route("/search/:id").get(Tool_1.toolController.searchTool);
 exports.default = router;

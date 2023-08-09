@@ -28,4 +28,6 @@ router
   )
   .get(toolController.getToolById);
 
+router.route("/search/:id").get(toolController.searchTool);
+
 export default router;
