@@ -9,4 +9,8 @@ const Auth_1 = require("../../modules/Auth");
 const router = express_1.default.Router();
 router.route("/").post(Auth_1.auth.protect, Cart_1.cartController.BorrowTool);
 router.route("/user").get(Auth_1.auth.protect, Cart_1.cartController.getUserBorrowedTools);
+router
+    .route("/:id")
+    .delete(Auth_1.auth.protect, Cart_1.cartController.RemoveTool)
+    .get(Cart_1.cartController.getBorrowedToolById);
 exports.default = router;

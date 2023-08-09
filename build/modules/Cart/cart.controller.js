@@ -35,8 +35,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserBorrowedTools = exports.BorrowTool = void 0;
+exports.getBorrowedToolById = exports.getUserBorrowedTools = exports.RemoveTool = exports.BorrowTool = void 0;
 const http_status_1 = __importDefault(require("http-status"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const utils_1 = require("../utils");
 const cart_model_1 = __importDefault(require("./cart.model"));
 const cartService = __importStar(require("./cart.service"));
@@ -51,8 +52,12 @@ exports.BorrowTool = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, voi
         data: newCart,
     });
 }));
-// export const RemoveTool = catchAsync(async (req: Request, res: Response) => {
-// });
+exports.RemoveTool = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (typeof req.params.id === "string") {
+        yield cartService.deleteCartById(new mongoose_1.default.Types.ObjectId(req.params.id));
+        res.status(http_status_1.default.NO_CONTENT).send();
+    }
+}));
 exports.getUserBorrowedTools = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userTools = (yield cartService.getBorrowedTools(req.user.id));
     res.status(http_status_1.default.OK).json({
@@ -60,4 +65,13 @@ exports.getUserBorrowedTools = (0, utils_1.catchAsync)((req, res) => __awaiter(v
         length: userTools === null || userTools === void 0 ? void 0 : userTools.length,
         data: userTools,
     });
+}));
+exports.getBorrowedToolById = (0, utils_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (typeof req.params.id === "string") {
+        const doc = yield cartService.getCartById(new mongoose_1.default.Types.ObjectId(req.params.id));
+        res.status(http_status_1.default.OK).json({
+            status: "success",
+            data: doc,
+        });
+    }
 }));
