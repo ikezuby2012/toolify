@@ -8,6 +8,7 @@ const swagger_route_1 = __importDefault(require("./swagger.route"));
 const auth_route_1 = __importDefault(require("./auth.route"));
 const tool_route_1 = __importDefault(require("./tool.route"));
 const cart_route_1 = __importDefault(require("./cart.route"));
+const payment_route_1 = __importDefault(require("./payment.route"));
 // import config from "../../config";
 const router = express_1.default.Router();
 const defaultIRoute = [
@@ -22,6 +23,7 @@ const defaultIRoute = [
     },
     { path: "/tool", route: tool_route_1.default },
     { path: "/cart", route: cart_route_1.default },
+    { path: "/checkout", route: payment_route_1.default },
 ];
 const devIRoute = [
     // IRoute available only in development mode
